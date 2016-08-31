@@ -325,9 +325,9 @@
   ))}
   ```
 
-## Refs
+## 引用(Refs)
 
-  - Always use ref callbacks. eslint: [`react/no-string-refs`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md)
+  - 要使用引用回调函数. eslint: [`react/no-string-refs`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md)
 
     ```jsx
     // bad
@@ -341,9 +341,9 @@
     />
     ```
 
-## Parentheses
+## 圆括号
 
-  - Wrap JSX tags in parentheses when they span more than one line. eslint: [`react/wrap-multilines`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md)
+  - 当JSX标签超过一行时使用圆括号包裹. eslint: [`react/wrap-multilines`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md)
 
     ```jsx
     // bad
@@ -369,9 +369,9 @@
     }
     ```
 
-## Tags
+## 标签
 
-  - Always self-close tags that have no children. eslint: [`react/self-closing-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/self-closing-comp.md)
+  - 对没有子元素的标签进行自闭和. eslint: [`react/self-closing-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/self-closing-comp.md)
 
     ```jsx
     // bad
@@ -381,7 +381,7 @@
     <Foo className="stuff" />
     ```
 
-  - If your component has multi-line properties, close its tag on a new line. eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md)
+  - 如果组件包含多行属性,在新的一行闭合标签. eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md)
 
     ```jsx
     // bad
@@ -396,9 +396,9 @@
     />
     ```
 
-## Methods
+## 方法
 
-  - Use arrow functions to close over local variables.
+  - 使用箭头函数返回本地变量.
 
     ```jsx
     function ItemList(props) {
@@ -415,9 +415,9 @@
     }
     ```
 
-  - Bind event handlers for the render method in the constructor. eslint: [`react/jsx-no-bind`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
+  - 对于render方法，在构造函数中绑定事件处理函数. eslint: [`react/jsx-no-bind`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
 
-  > Why? A bind call in the render path creates a brand new function on every single render.
+  > 原因：每次进行render调用`bind`时都会创建新的函数.
 
     ```jsx
     // bad
@@ -449,8 +449,8 @@
     }
     ```
 
-  - Do not use underscore prefix for internal methods of a React component.
-  > Why? Underscore prefixes are sometimes used as a convention in other languages to denote privacy. But, unlike those languages, there is no native support for privacy in JavaScript, everything is public. Regardless of your intentions, adding underscore prefixes to your properties does not actually make them private, and any property (underscore-prefixed or not) should be treated as being public. See issues #1024, and #490 for a more in-depth discussion.
+  - React组件的内部方法不要使用下划线前缀.
+  > 原因：下划线前缀有时被其他语言用来表示私有性.但是JavaScript不一样，它并不支持私有性(priviate)，所有的都是公开的(public). 不管你怎么想, 属性添加下划线前缀并不会使其真正私有化, 任何属性 (无论是否有下划线前缀) 都应被视为公开的. 参考issues #1024和#490更多的讨论.
 
     ```jsx
     // bad
@@ -472,7 +472,7 @@
     }
     ```
 
-  - Be sure to return a value in your `render` methods. eslint: [`require-render-return`](https://github.com/yannickcr/eslint-plugin-react/pull/502)
+  - 确保在`render`方法中返回值. eslint: [`require-render-return`](https://github.com/yannickcr/eslint-plugin-react/pull/502)
 
     ```jsx
     // bad
@@ -486,11 +486,11 @@
     }
     ```
 
-## Ordering
+## 顺序
 
-  - Ordering for `class extends React.Component`:
+  - `class extends React.Component`的顺序:
 
-  1. optional `static` methods
+  1. 可选的 `static` 方法
   1. `constructor`
   1. `getChildContext`
   1. `componentWillMount`
@@ -500,12 +500,12 @@
   1. `componentWillUpdate`
   1. `componentDidUpdate`
   1. `componentWillUnmount`
-  1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
-  1. *getter methods for `render`* like `getSelectReason()` or `getFooterContent()`
-  1. *Optional render methods* like `renderNavigation()` or `renderProfilePicture()`
+  1. *事件处理函数* 例如`onClickSubmit()`或`onChangeDescription()`
+  1. *`render`的getter方法* 如`getSelectReason()` or `getFooterContent()`
+  1. *可选的render方法* 如 `renderNavigation()` or `renderProfilePicture()`
   1. `render`
 
-  - How to define `propTypes`, `defaultProps`, `contextTypes`, etc...
+  - 如何定义 `propTypes`, `defaultProps`, `contextTypes` 等...
 
     ```jsx
     import React, { PropTypes } from 'react';
@@ -536,7 +536,7 @@
     export default Link;
     ```
 
-  - Ordering for `React.createClass`: eslint: [`react/sort-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/sort-comp.md)
+  - `React.createClass`的顺序: eslint: [`react/sort-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/sort-comp.md)
 
   1. `displayName`
   1. `propTypes`
@@ -555,22 +555,22 @@
   1. `componentWillUpdate`
   1. `componentDidUpdate`
   1. `componentWillUnmount`
-  1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
-  1. *getter methods for `render`* like `getSelectReason()` or `getFooterContent()`
-  1. *Optional render methods* like `renderNavigation()` or `renderProfilePicture()`
+  1. *事件处理函数* 如 `onClickSubmit()` 或 `onChangeDescription()`
+  1. *`render`的getter方法* 如 `getSelectReason()` 或 `getFooterContent()`
+  1. *可选的render方法* 如 `renderNavigation()` 或 `renderProfilePicture()`
   1. `render`
 
 ## `isMounted`
 
-  - Do not use `isMounted`. eslint: [`react/no-is-mounted`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-is-mounted.md)
+  - 不要使用 `isMounted`. eslint: [`react/no-is-mounted`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-is-mounted.md)
 
-  > Why? [`isMounted` is an anti-pattern][anti-pattern], is not available when using ES6 classes, and is on its way to being officially deprecated.
+  > 原因： [`isMounted`是反模式][反模式], 当使用ES6的时候不可用,正逐渐被官方废弃.
 
   [anti-pattern]: https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html
+I
+## 翻译
 
-## Translation
-
-  This JSX/React style guide is also available in other languages:
+  其他语言的JSX/React编码规范翻译:
 
   - ![cn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png) **Chinese (Simplified)**: [JasonBoy/javascript](https://github.com/JasonBoy/javascript/tree/master/react)
   - ![pl](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Poland.png) **Polish**: [pietraszekl/javascript](https://github.com/pietraszekl/javascript/tree/master/react)
