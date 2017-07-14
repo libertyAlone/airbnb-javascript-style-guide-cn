@@ -1155,7 +1155,7 @@
     ```
 
   <a name="modules--prefer-default-export"></a>
-  - [10.6](#modules--prefer-default-export) 在单一expoort的模块中，建议export default而不是具名export.
+  - [10.6](#modules--prefer-default-export) 在单一export的模块中，建议export default而不是具名export.
  eslint: [`import/prefer-default-export`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md)
 
     ```javascript
