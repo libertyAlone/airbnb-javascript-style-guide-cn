@@ -5,19 +5,20 @@
 ## 内容
 
   1. [基本规则](#基本规则)
-  1. [类(Class) vs `React.createClass` vs 无状态(stateless)](#类(Class)vs`React.createClass`vs无状态(stateless))
-  1. [命名](#命名)
-  1. [声明](#声明)
-  1. [对齐](#对齐)
-  1. [引号](#引号)
-  1. [空格](#空格)
-  1. [属性](#属性)
-  1. [引用(Refs)](#引用(Refs))
-  1. [括号](#括号)
-  1. [标签](#标签)
-  1. [方法](#方法)
-  1. [顺序](#顺序)
-  1. [`isMounted`](#ismounted)
+  2. [类(Class) vs `React.createClass` vs 无状态(stateless)](#类vs`React.createClass`vs无状态)
+  3. [混入(Mixin)](#混入)
+  4. [命名](#命名)
+  5. [声明](#声明)
+  6. [对齐](#对齐)
+  7. [引号](#引号)
+  8. [空格](#空格)
+  9. [属性(Props)](#属性)
+  10. [引用(Refs)](#引用)
+  11. [括号](#括号)
+  12. [标签](#标签)
+  13. [方法](#方法)
+  14. [顺序](#顺序)
+  15. [`isMounted`](#isMounted)
 
 ## 基本规则
 
@@ -28,7 +29,7 @@
 
 ## Class vs `React.createClass` vs stateless
 
-  - 如果组件有内部状态或引用, 建议使用 `class extends React.Component` 而不是 `React.createClass` 除非有充足的理由使用mixin. eslint: [`react/prefer-es6-class`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md) [`react/prefer-stateless-function`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md)
+  - 如果组件有内部状态或引用, 建议使用 `class extends React.Component` 而不是 `React.createClass`. eslint: [`react/prefer-es6-class`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md) [`react/prefer-stateless-function`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md)
 
     ```jsx
     // bad
@@ -68,7 +69,10 @@
       return <div>{hello}</div>;
     }
     ```
-
+## 混入
+  - [不要使用mixin](#https://facebook.github.io/react/blog/2016/07/13/mixins-considered-harmful.html)
+  > 原因:Mixin引入了隐式的依赖,导致命名冲突并且复杂度会滚雪球式的增加.多数mixin的情形都可以通过组件,高阶组件或工具模块等更好的方式实现.
+  
 ## 命名
 
   - **文件后缀**: React组件使用`.jsx`后缀.
@@ -127,6 +131,16 @@
       return WithFoo;
     }
     ```
+   - **属性命名**: 避免出于不同的目的使用DOM组件的属性名.
+  > 原因? 人们期望像`style`和`className`这样的属性只代表具体的事情.为你的应用去改变这种API会使代码难以阅读和维护，可能会产生bug.
+
+    ```jsx
+    // bad
+    <MyComponent style="fancy" />
+
+    // good
+    <MyComponent variant="fancy" />
+    ```
 ## 声明
 
   - 不要使用 `displayName` 命名模块. 要通过引用来命名.
@@ -174,8 +188,7 @@
 
   - JSX属性要使用双引号 (`"`), 但是其他JS部分要使用单引号. eslint: [`jsx-quotes`](http://eslint.org/docs/rules/jsx-quotes)
 
-  > 原因? JSX属性 [不能包含转译的引号](http://eslint.org/docs/rules/jsx-quotes), 所以双引号使得像`don't`一样的缩写更容易输入.
-  > 一般HTML属性也是使用双引号而不是单引号,所以JSX属性同样适用.
+  > 原因? 一般HTML属性也是使用双引号而不是单引号,所以JSX属性同样适用.
 
     ```jsx
     // bad
@@ -193,7 +206,7 @@
 
 ## 空格
 
-  - 自闭和的标签前要加一个空格.
+  - 自闭合的标签前要加一个空格.
 
     ```jsx
     // bad
@@ -210,7 +223,7 @@
     <Foo />
     ```
 
-  - 不要再JSX的花括号里边加空格. eslint: [`react/jsx-curly-spacing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-curly-spacing.md)
+  - 不要在JSX的花括号里边加空格. eslint: [`react/jsx-curly-spacing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-curly-spacing.md)
 
     ```jsx
     // bad
@@ -324,8 +337,38 @@
     />
   ))}
   ```
+  - 为所有的非必需属性定义明确的默认值(defaultProps).
 
-## 引用(Refs)
+  > Why? propTypes are a form of documentation, and providing defaultProps means the reader of your code doesn’t have to assume as much. In addition, it can mean that your code can omit certain type checks.
+  > 原因? propTypes是一种文档形式，提供defaultProps意味着阅读你代码的人不需要假想太多.此外,这也可以让你的代码忽略具体的类型检查.
+
+  ```jsx
+  // bad
+  function SFC({ foo, bar, children }) {
+    return <div>{foo}{bar}{children}</div>;
+  }
+  SFC.propTypes = {
+    foo: PropTypes.number.isRequired,
+    bar: PropTypes.string,
+    children: PropTypes.node,
+  };
+
+  // good
+  function SFC({ foo, bar, children }) {
+    return <div>{foo}{bar}{children}</div>;
+  }
+  SFC.propTypes = {
+    foo: PropTypes.number.isRequired,
+    bar: PropTypes.string,
+    children: PropTypes.node,
+  };
+  SFC.defaultProps = {
+    bar: '',
+    children: null,
+  };
+  ```
+
+## 引用
 
   - 要使用引用回调函数. eslint: [`react/no-string-refs`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md)
 
