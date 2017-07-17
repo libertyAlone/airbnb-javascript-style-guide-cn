@@ -1,7 +1,13 @@
 # Airbnb JavaScript编码规范指南(ES6)中文版
 
 *个人翻译，一些个人见解会用"注："的形式标出*
-*个人翻译的CSS规范:*[Airbnb CSS/Sass规范](https://github.com/libertyAlone/airbnb-javascript-style-guide-cn/tree/master/css)
+
+* 其他翻译:
+
+  - [Airbnb CSS/Sass规范](https://github.com/libertyAlone/airbnb-javascript-style-guide-cn/tree/master/css)
+
+  - [Airbnb css-in-javascript规范](https://github.com/libertyAlone/airbnb-javascript-style-guide-cn/tree/master/css-in-javascript)
+
 ## 内容
 1. [类型](#类型)
 2. [引用](#引用)
