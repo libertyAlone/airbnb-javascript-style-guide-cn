@@ -37,15 +37,17 @@
 26. [jQuery](#jquery)
 27. [ECMAScript 5 兼容性](#ECMAScript5兼容性)
 28. [ECMAScript 6+ (ES 2015+) 风格](#ECMAScript6+(ES2015+)风格)
-29. [测试](#测试)
-30. [性能](#性能)
-31. [资源](#资源)
-32. [谁在使用?](#谁在使用?)
-33. [翻译](#翻译)
-34. [JavaScript编码规范指南](#JavaScript编码规范指南)
-35. [和我们聊聊JavaScript](#和我们聊聊JavaScript)
-36. [贡献者](#贡献者)
-37. [许可](#许可)
+29. [标准库](#标准库)
+30. [测试](#测试)
+31. [性能](#性能)
+32. [资源](#资源)
+33. [谁在使用?](#谁在使用?)
+34. [翻译](#翻译)
+35. [JavaScript编码规范指南](#JavaScript编码规范指南)
+36. [和我们聊聊JavaScript](#和我们聊聊JavaScript)
+37. [贡献者](#贡献者)
+38. [许可](#许可)
+39. [修改](#修改)
 
 ## 类型
 
@@ -66,7 +68,8 @@
 
     console.log(foo, bar); // => 1, 9
     ```
-
+  Symbols不能被完全polyfill,所以当用于不能本地支持该特性的浏览器/环境时不应该被使用.
+  
   <a name="types--complex"></a><a name="1.2"></a>
   - [1.2](#types--complex)  **复杂类型**: 存取复杂类型作用于值的引用.
 
@@ -353,15 +356,30 @@
     ```
 
   <a name="arrays--from"></a><a name="4.4"></a>
-  - [4.4](#arrays--from) 将类数组对象转换成数组使用[Array.from](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from).
+  - [4.4](#arrays--from) 将类数组对象转换成数组使用扩展运算符`...`代替[Array.from](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from).
 
     ```javascript
     const foo = document.querySelectorAll('.foo');
-    const nodes = Array.from(foo);
+    
+    // good
+	const nodes = Array.from(foo);
+
+	// best
+	const nodes = [...foo];
+    ```
+  <a name="arrays--mapping"></a>
+  - [4.5](#arrays--mapping) 遍历迭代器进行映射时使用 [Array.from](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from) 代替扩展运算符 `...`, 因为这可以避免创建中间数组.
+
+    ```javascript
+    // bad
+    const baz = [...foo].map(bar);
+
+    // good
+    const baz = Array.from(foo, bar);
     ```
 
-  <a name="arrays--callback-return"></a><a name="4.5"></a>
-  - [4.5](#arrays--callback-return) 在数组方法的回调函数中使用return.如果函数体只有一条声明则可以省略return[8.2](#8.2). eslint: [`array-callback-return`](http://eslint.org/docs/rules/array-callback-return)
+  <a name="arrays--callback-return"></a><a name="4.6"></a>
+  - [4.6](#arrays--callback-return) 在数组方法的回调函数中使用return.如果函数体只有一条声明则可以省略return[8.2](#8.2). eslint: [`array-callback-return`](http://eslint.org/docs/rules/array-callback-return)
 
     ```javascript
     // good
@@ -409,7 +427,7 @@
     });
     ```
   <a name="arrays--bracket-newline"></a>
-  - [4.6](#arrays--bracket-newline) 如果一个数组有多行则在数组的开括号后和闭括号前要使用新行
+  - [4.7](#arrays--bracket-newline) 如果一个数组有多行则在数组的开括号后和闭括号前要使用新行
   
 
     ```javascript
@@ -839,10 +857,10 @@
     console.log(...x);
 
     // bad
-    new (Function.prototype.bind.apply(Date, [null, 2016, 08, 05]));
+    new (Function.prototype.bind.apply(Date, [null, 2016, 8, 5]));
 
     // good
-    new Date(...[2016, 08, 05]);
+    new Date(...[2016, 8, 5]);
     ```
 
   <a name="functions--signature-invocation-indentation"></a>
@@ -955,16 +973,20 @@
 
     ```js
     // bad
-    [1, 2, 3].map(number => 'As time went by, the string containing the ' +
-      `${number} became much longer. So we needed to break it over multiple ` +
-      'lines.'
+    ['get', 'post', 'put'].map(httpMethod => Object.prototype.hasOwnProperty.call(
+        httpMagicObjectWithAVeryLongName,
+        httpMethod,
+      )
     );
 
     // good
-    [1, 2, 3].map(number => (
-      `As time went by, the string containing the ${number} became much ` +
-      'longer. So we needed to break it over multiple lines.'
+    ['get', 'post', 'put'].map(httpMethod => (
+      Object.prototype.hasOwnProperty.call(
+        httpMagicObjectWithAVeryLongName,
+        httpMethod,
+      )
     ));
+
     ```
 
   <a name="arrows--one-arg-parens"></a><a name="8.4"></a>
@@ -1457,6 +1479,16 @@
 
     const isJedi = getProp('jedi');
     ```
+  <a name="es2016-properties--exponentiation-operator"></a>
+  - [12.3](#es2016-properties--exponentiation-operator) 当使用幂次运算时使用 `**` . eslint: [`no-restricted-properties`](https://eslint.org/docs/rules/no-restricted-properties).
+
+    ```javascript
+    // bad
+    const binary = Math.pow(2, 10);
+
+    // good
+    const binary = 2 ** 10;
+    ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1876,6 +1908,38 @@
     const bar = !!c;
     const baz = !c;
     ```
+  <a name="comparison--no-mixed-operators"></a>
+  - [15.8](#comparison--no-mixed-operators) 声明语句中有多个运算符时用圆括号包裹运算符. 当有多个数学运算符时,不要混合 `**` 和 `%` 或者 `+`, `-`, `*`, `/`. eslint: [`no-mixed-operators`](https://eslint.org/docs/rules/no-mixed-operators.html)
+
+    > Why? This improves readability and clarifies the developer’s intention.
+
+    ```javascript
+    // bad
+    const foo = a && b < 0 || c > 0 || d + 1 === 0;
+
+    // bad
+    const bar = a ** b - 5 % d;
+
+    // bad
+    if (a || b && c) {
+      return d;
+    }
+
+    // good
+    const foo = (a && b < 0) || c > 0 || (d + 1 === 0);
+
+    // good
+    const bar = (a ** b) - (5 % d);
+
+    // good
+    if ((a || b) && c) {
+      return d;
+    }
+
+    // good
+    const bar = a + b / c * d;
+    ```
+
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1928,7 +1992,70 @@
       thing3();
     }
     ```
+  <a name="blocks--no-else-return"></a><a name="16.3"></a>
+  - [16.3](#blocks--no-else-return) 如果 `if` 块总是执行 `return` 声明, 随后的 `else` 块是不必要的. 跟随`if`块的`else if`块中包含的`return`可以被拆成多个`if`块. eslint: [`no-else-return`](https://eslint.org/docs/rules/no-else-return)
 
+    ```javascript
+    // bad
+    function foo() {
+      if (x) {
+        return x;
+      } else {
+        return y;
+      }
+    }
+
+    // bad
+    function cats() {
+      if (x) {
+        return x;
+      } else if (y) {
+        return y;
+      }
+    }
+
+    // bad
+    function dogs() {
+      if (x) {
+        return x;
+      } else {
+        if (y) {
+          return y;
+        }
+      }
+    }
+
+    // good
+    function foo() {
+      if (x) {
+        return x;
+      }
+
+      return y;
+    }
+
+    // good
+    function cats() {
+      if (x) {
+        return x;
+      }
+
+      if (y) {
+        return y;
+      }
+    }
+
+    //good
+    function dogs(x) {
+      if (x) {
+        if (z) {
+          return y;
+        }
+      } else {
+        return z;
+      }
+    }
+    ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -2379,7 +2506,7 @@
     ```
 
   <a name="whitespace--in-parens"></a><a name="19.9"></a>
-  - [19.9](#whitespace--in-parens) 圆括号中不要添加括号. eslint: [`space-in-parens`](http://eslint.org/docs/rules/space-in-parens.html) jscs: [`disallowSpacesInsideParentheses`](http://jscs.info/rule/disallowSpacesInsideParentheses)
+  - [19.9](#whitespace--in-parens) 圆括号中不要添加空格. eslint: [`space-in-parens`](http://eslint.org/docs/rules/space-in-parens.html) jscs: [`disallowSpacesInsideParentheses`](http://jscs.info/rule/disallowSpacesInsideParentheses)
 
     ```javascript
     // bad
@@ -2428,7 +2555,7 @@
     ```
 
   <a name="whitespace--max-len"></a><a name="19.12"></a>
-  - [19.12](#whitespace--max-len)  避免一行代码超过100个字符(包括空格). 注意: [above](#strings--line-length),不包括整体不应爱被分割的长字符串. eslint: [`max-len`](http://eslint.org/docs/rules/max-len.html) jscs: [`maximumLineLength`](http://jscs.info/rule/maximumLineLength)
+  - [19.12](#whitespace--max-len)  避免一行代码超过100个字符(包括空格). 注意: [above](#strings--line-length),不包括整体不应该被分割的长字符串. eslint: [`max-len`](http://eslint.org/docs/rules/max-len.html) jscs: [`maximumLineLength`](http://jscs.info/rule/maximumLineLength)
 
     > 原因：确保可读性和可维护性.
 
@@ -2630,11 +2757,14 @@
   - [22.1](#coercion--explicit) 在声明的开始部分进行类型强转.
 
   <a name="coercion--strings"></a><a name="21.2"></a>
-  - [22.2](#coercion--strings)  Strings:
+  - [22.2](#coercion--strings)  字符串:
 
     ```javascript
     // => this.reviewScore = 9;
-
+	
+	// bad
+    const totalScore = new String(this.reviewScore); // typeof totalScore is "object" not "string"
+    
     // bad
     const totalScore = this.reviewScore + ''; // invokes this.reviewScore.valueOf()
 
@@ -3107,10 +3237,49 @@
 
 **[⬆ back to top](#table-of-contents)**
 
+## 标准库
+
+  [标准库](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects)包含功能有问题但由于遗留原因保留下来的功能.
+
+  <a name="standard-library--isnan"></a>
+  - [29.1](#standard-library--isnan) 使用 `Number.isNaN` 代替全局 `isNaN`方法.
+    eslint: [`no-restricted-globals`](https://eslint.org/docs/rules/no-restricted-globals)
+
+    > 原因: 全局的 `isNaN` 方法会将非数字转换为数字, 任何被转换为NaN的东西都会返回true.
+    > 若该行为被允许，则要使其明显.
+
+    ```javascript
+    // bad
+    isNaN('1.2'); // false
+    isNaN('1.2.3'); // true
+
+    // good
+    Number.isNaN('1.2.3'); // false
+    Number.isNaN(Number('1.2.3')); // true
+    ```
+
+  <a name="standard-library--isfinite"></a>
+  - [29.2](#standard-library--isfinite) 使用 `Number.isFinite` 代替全局 `isFinite`.
+    eslint: [`no-restricted-globals`](https://eslint.org/docs/rules/no-restricted-globals)
+
+    > 原因: 全局 `isFinite` 会把非数字转换为数字, 任何被转换为有限大的数字都会返回true.
+    > 若该行为被允许，则要使其明显.
+
+    ```javascript
+    // bad
+    isFinite('2e3'); // true
+
+    // good
+    Number.isFinite('2e3'); // false
+    Number.isFinite(parseInt('2e3', 10)); // true
+    ```
+
+**[⬆ back to top](#table-of-contents)**
+
 ## 测试
 
-  <a name="testing--yup"></a><a name="29.1"></a>
-  - [29.1](#testing--yup) **需要**
+  <a name="testing--yup"></a><a name="30.1"></a>
+  - [30.1](#testing--yup) **需要**
 
     ```javascript
     function foo() {
@@ -3118,8 +3287,8 @@
     }
     ```
 
-  <a name="testing--for-real"></a><a name="29.2"></a>
-  - [29.2](#testing--for-real) **不要这么做，很严重**:
+  <a name="testing--for-real"></a><a name="30.2"></a>
+  - [30.2](#testing--for-real) **不要这么做，很严重**:
    - 不论你用哪一个测试框架，都应该写测试用例!
    - 尽力写一些简洁的函数, 使改动数据的部分最小化.
    - 小心使用 stubs 和 mocks - 它们会使测试变得脆弱.
