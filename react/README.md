@@ -71,7 +71,7 @@
     ```
 ## 混入
   - [不要使用mixin](#https://facebook.github.io/react/blog/2016/07/13/mixins-considered-harmful.html)
-  > 原因:Mixin引入了隐式的依赖,导致命名冲突并且复杂度会滚雪球式的增加.多数mixin的情形都可以通过组件,高阶组件或工具模块等更好的方式实现.
+  > 原因: Mixin引入了隐式的依赖,导致命名冲突并且复杂度会滚雪球式的增加.多数mixin的情形都可以通过组件,高阶组件或工具模块等更好的方式实现.
   
 ## 命名
 
@@ -137,7 +137,10 @@
     ```jsx
     // bad
     <MyComponent style="fancy" />
-
+    
+	// bad
+    <MyComponent className="fancy" />
+    
     // good
     <MyComponent variant="fancy" />
     ```
@@ -157,7 +160,7 @@
     }
     ```
 
-## 代码对齐
+## 对齐
 
   - 遵循以下JSX语法的对齐风格. eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md)
 
@@ -206,7 +209,7 @@
 
 ## 空格
 
-  - 自闭合的标签前要加一个空格.
+  - 自闭合的标签前要加一个空格. eslint: [`no-multi-spaces`](https://eslint.org/docs/rules/no-multi-spaces), [`react/jsx-tag-spacing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-tag-spacing.md)
 
     ```jsx
     // bad
@@ -263,6 +266,9 @@
     <Foo
       hidden
     />
+    
+    // good
+    <Foo hidden />
     ```
 
   - `<img>`标签中要包含`alt`属性. 如果图片是presentational(?不明), `alt`可以为空字符串或者`<img>`要有`role="presentation"`. eslint: [`jsx-a11y/img-has-alt`](https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/img-has-alt.md)
@@ -339,7 +345,6 @@
   ```
   - 为所有的非必需属性定义明确的默认值(defaultProps).
 
-  > Why? propTypes are a form of documentation, and providing defaultProps means the reader of your code doesn’t have to assume as much. In addition, it can mean that your code can omit certain type checks.
   > 原因? propTypes是一种文档形式，提供defaultProps意味着阅读你代码的人不需要假想太多.此外,这也可以让你的代码忽略具体的类型检查.
 
   ```jsx
@@ -366,6 +371,58 @@
     bar: '',
     children: null,
   };
+  ```
+
+  - 谨慎地使用扩展属性.
+  > 原因? 除非你很大可能向下传递给组件不必要的属性. 对于React v15.6.1和更老的版本, 你可以 [给DOM传递非法的HTML属性](https://reactjs.org/blog/2017/09/08/dom-attributes-in-react-16.html).
+
+  例外:
+
+  - 向下代理属性并且提升propType的HOC
+
+  ```jsx
+  function HOC(WrappedComponent) {
+    return class Proxy extends React.Component {
+      Proxy.propTypes = {
+        text: PropTypes.string,
+        isLoading: PropTypes.bool
+      };
+
+      render() {
+        return <WrappedComponent {...this.props} />
+      }
+    }
+  }
+  ```
+
+  - 对于已知且确定的属性来扩展对象. 这对于用MoCha的beforeEach构造方法来测试React组件会非常有用.
+
+  ```jsx
+  export default function Foo {
+    const props = {
+      text: '',
+      isPublished: false
+    }
+
+    return (<div {...props} />);
+  }
+  ```
+
+  使用注意事项:
+  可能的话过滤掉不必要的属性. 使用 [prop-types-exact](https://www.npmjs.com/package/prop-types-exact) 来避免bug.
+
+  ```jsx
+  //good
+  render() {
+    const { irrelevantProp, ...relevantProps  } = this.props;
+    return <WrappedComponent {...relevantProps} />
+  }
+
+  //bad
+  render() {
+    const { irrelevantProp, ...relevantProps  } = this.props;
+    return <WrappedComponent {...this.props} />
+  }
   ```
 
 ## 引用
@@ -616,9 +673,14 @@ I
   其他语言的JSX/React编码规范翻译:
 
   - ![cn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png) **Chinese (Simplified)**: [JasonBoy/javascript](https://github.com/JasonBoy/javascript/tree/master/react)
-  - ![pl](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Poland.png) **Polish**: [pietraszekl/javascript](https://github.com/pietraszekl/javascript/tree/master/react)
+  - ![tw](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Taiwan.png) **Chinese (Traditional)**: [jigsawye/javascript](https://github.com/jigsawye/javascript/tree/master/react)
+  - ![es](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Spain.png) **Español**: [agrcrobles/javascript](https://github.com/agrcrobles/javascript/tree/master/react)
+  - ![jp](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Japan.png) **Japanese**: [mitsuruog/javascript-style-guide](https://github.com/mitsuruog/javascript-style-guide/tree/master/react)
   - ![kr](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/South-Korea.png) **Korean**: [apple77y/javascript](https://github.com/apple77y/javascript/tree/master/react)
+  - ![pl](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Poland.png) **Polish**: [pietraszekl/javascript](https://github.com/pietraszekl/javascript/tree/master/react)
   - ![Br](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Brazil.png) **Portuguese**: [ronal2do/javascript](https://github.com/ronal2do/airbnb-react-styleguide)
-  - ![jp](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Japan.png) **Japanese**: [mitsuruog/javascript-style-guide](https://github.com/mitsuruog/javascript-style-guide)
+  - ![ru](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Russia.png) **Russian**: [leonidlebedev/javascript-airbnb](https://github.com/leonidlebedev/javascript-airbnb/tree/master/react)
+  - ![th](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Thailand.png) **Thai**: [lvarayut/javascript-style-guide](https://github.com/lvarayut/javascript-style-guide/tree/master/react)
+  - ![ua](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Ukraine.png) **Ukrainian**: [ivanzusko/javascript](https://github.com/ivanzusko/javascript/tree/master/react)
 
 **[⬆ back to top](#table-of-contents)**

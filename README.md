@@ -2726,27 +2726,48 @@
   <a name="semicolons--required"></a><a name="21.1"></a>
   - [21.1](#21.1) 当然要使用分号 eslint: [`semi`](http://eslint.org/docs/rules/semi.html) jscs: [`requireSemicolons`](http://jscs.info/rule/requireSemicolons)
 
+    > 原因: 当JavaScript不使用分号遇到分行符时，会使用一系列称作[分号自动插入(ASI)](https://tc39.github.io/ecma262/#sec-automatic-semicolon-insertion) 的规则来决定其是否应该将分行符视作声明的结尾, (正如名字所暗示的) 如果必要的话会在分行符前插入一个分号. ASI拥有几个古怪的行为, 如果JavaScript错误地解释了换行符你的代码会收到破坏. 这些规则会随着新的特性成为JavaScript的一部分而变得越来越复杂. 显式地结束声明语句并且配置好校验器来捕获缺失的分号会帮你避免遇到这些问题.
+
     ```javascript
-    // bad
-    (function () {
-      const name = 'Skywalker'
-      return name
-    })()
+    // bad - raises exception
+    const luke = {}
+    const leia = {}
+    [luke, leia].forEach(jedi => jedi.father = 'vader')
+
+    // bad - raises exception
+    const reaction = "No! That's impossible!"
+    (async function meanwhileOnTheFalcon(){
+      // handle `leia`, `lando`, `chewie`, `r2`, `c3p0`
+      // ...
+    }())
+
+    // bad - returns `undefined` instead of the value on the next line - always happens when `return` is on a line by itself because of ASI!
+    function foo() {
+      return
+        'search your feelings, you know it to be foo'
+    }
 
     // good
-    (function () {
-      const name = 'Skywalker';
-      return name;
+    const luke = {};
+    const leia = {};
+    [luke, leia].forEach((jedi) => {
+      jedi.father = 'vader';
+    });
+
+    // good
+    const reaction = "No! That's impossible!";
+    (async function meanwhileOnTheFalcon(){
+      // handle `leia`, `lando`, `chewie`, `r2`, `c3p0`
+      // ...
     }());
 
-    // good, but legacy (guards against the function becoming an argument when two files with IIFEs are concatenated)
-    ;(() => {
-      const name = 'Skywalker';
-      return name;
-    }());
+    // good
+    function foo() {
+      return 'search your feelings, you know it to be foo';
+    }
     ```
 
-    [更多](http://stackoverflow.com/questions/7365172/semicolon-before-self-invoking-function/7365214%237365214).
+    [更多](http://stackoverflow.com/questions/7365172/semicolon-before-self-invoking-function/7365214#7365214).
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -2757,7 +2778,7 @@
   - [22.1](#coercion--explicit) 在声明的开始部分进行类型强转.
 
   <a name="coercion--strings"></a><a name="21.2"></a>
-  - [22.2](#coercion--strings)  字符串:
+  - [22.2](#coercion--strings)  字符串: [`no-new-wrappers`](https://eslint.org/docs/rules/no-new-wrappers)
 
     ```javascript
     // => this.reviewScore = 9;
@@ -2814,7 +2835,7 @@
     ```
 
   <a name="coercion--bitwise"></a><a name="22.5"></a>
-  - [22.5](#coercion--bitwise) **注意:** 使用位运算请小心. 数字使用 [64位值](http://es5.github.io/#x4.3.19)表示, 但是位运算只返回32位整数 ([代码](http://es5.github.io/#x11.7)). 小于32位整数的位运算会导致不可预期的行为. [讨论](https://github.com/airbnb/javascript/issues/109). 最大的有符号整数是 2,147,483,647:
+  - [22.5](#coercion--bitwise) **注意:** 谨慎使用位运算. 数字使用 [64位值](http://es5.github.io/#x4.3.19)表示, 但是位运算只返回32位整数 ([代码](http://es5.github.io/#x11.7)). 小于32位整数的位运算会导致不可预期的行为. [讨论](https://github.com/airbnb/javascript/issues/109). 最大的有符号整数是 2,147,483,647:
 
     ```javascript
     2147483647 >> 0 //=> 2147483647
