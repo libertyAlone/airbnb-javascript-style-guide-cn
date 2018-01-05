@@ -69,7 +69,7 @@
     console.log(foo, bar); // => 1, 9
     ```
   Symbols不能被完全polyfill,所以当用于不能本地支持该特性的浏览器/环境时不应该被使用.
-  
+
   <a name="types--complex"></a><a name="1.2"></a>
   - [1.2](#types--complex)  **复杂类型**: 存取复杂类型作用于值的引用.
 
@@ -286,11 +286,11 @@
   // best
   const has = Object.prototype.hasOwnProperty; // cache the lookup once, in module scope.
   /* or */
-  const has = require('has');
-  …
+  import has from 'has'; // https://www.npmjs.com/package/has
+  // ...
   console.log(has.call(object, key));
   ```
-  
+
   <a name="objects--rest-spread"></a>
   - [3.8](#objects--rest-spread) 优先使用对象展开运算符而不是对象浅拷贝[`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). 使用对象剩余运算符来获得新的有具体省略的对象.
 
@@ -360,12 +360,12 @@
 
     ```javascript
     const foo = document.querySelectorAll('.foo');
-    
-    // good
-	const nodes = Array.from(foo);
 
-	// best
-	const nodes = [...foo];
+    // good
+  const nodes = Array.from(foo);
+
+  // best
+  const nodes = [...foo];
     ```
   <a name="arrays--mapping"></a>
   - [4.5](#arrays--mapping) 遍历迭代器进行映射时使用 [Array.from](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from) 代替扩展运算符 `...`, 因为这可以避免创建中间数组.
@@ -428,7 +428,7 @@
     ```
   <a name="arrays--bracket-newline"></a>
   - [4.7](#arrays--bracket-newline) 如果一个数组有多行则在数组的开括号后和闭括号前要使用新行
-  
+
 
     ```javascript
     // bad
@@ -629,20 +629,20 @@
 
     ```javascript
     // bad
-	function foo() {
-  	  // ...
-	}
+  function foo() {
+      // ...
+  }
 
-	// bad
-	const foo = function () {
-  	  // ...
-	};
+  // bad
+  const foo = function () {
+      // ...
+  };
 
-	// good
-	const foo = function bar() {
-  	  // ...
-	};
-	
+  // good
+  const foo = function bar() {
+      // ...
+  };
+
     ```
 
   <a name="functions--iife"></a><a name="7.2"></a>
@@ -945,25 +945,25 @@
     [1, 2, 3].map((number, index) => ({
       index: number
     }));
-    
+
     // No implicit return with side effects
-	function foo(callback) {
-  	  const val = callback();
-  	  if (val === true) {
+  function foo(callback) {
+      const val = callback();
+      if (val === true) {
         // Do something if callback returns true
-  	  }
-	}
+      }
+  }
 
-	let bool = false;
+  let bool = false;
 
-	// bad
-	foo(() => bool = true);
+  // bad
+  foo(() => bool = true);
 
-	// good
-	foo(() => {
-  	  bool = true;
-	});
-	
+  // good
+  foo(() => {
+      bool = true;
+  });
+
     ```
 
   <a name="arrows--paren-wrap"></a><a name="8.3"></a>
@@ -1665,7 +1665,7 @@
 ## 变量提升
 
   <a name="hoisting--about"></a><a name="14.1"></a>
-  - [14.1](#hoisting--about) `var`声明会被提升到作用域的顶部, 但是赋值不会. `const` 和 `let` 声明有一个新的概念叫 [临时死区 (TDZ)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let). 了解 [typeof不再安全](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15)很重要.
+  - [14.1](#hoisting--about) `var`声明会被提升到最近的闭合函数作用域的顶部, 但是赋值不会. `const` 和 `let` 声明有一个新的概念叫 [临时死区 (TDZ)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let). 了解 [typeof不再安全](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15)很重要.
 
     ```javascript
     // we know this wouldn't work (assuming there
@@ -1715,8 +1715,8 @@
     }
     ```
 
-  <a name="hoisting--named-expresions"></a><a name="14.3"></a>
-  - [14.3](#hoisting--named-expresions) 具名函数表达式提升变量名字而不是函数名字或函数体.
+  <a name="hoisting--named-expressions"></a><a name="14.3"></a>
+  - [14.3](#hoisting--named-expressions) 具名函数表达式提升变量名字而不是函数名字或函数体.
 
     ```javascript
     function example() {
@@ -1792,12 +1792,12 @@
     if (isValid === true) {
       // ...
     }
-    
+
     // good
     if (isValid) {
       // ...
     }
-    
+
     // bad
     if (name) {
       // ...
@@ -1921,6 +1921,7 @@
     const bar = a ** b - 5 % d;
 
     // bad
+    // one may be confused into thinking (a || b) && c
     if (a || b && c) {
       return d;
     }
@@ -1932,7 +1933,7 @@
     const bar = (a ** b) - (5 % d);
 
     // good
-    if ((a || b) && c) {
+    if (a || (b && c)) {
       return d;
     }
 
@@ -2192,7 +2193,7 @@
   - [18.3](#comments--spaces) 所有注释都要以空格开头便于阅读. eslint: [`spaced-comment`](http://eslint.org/docs/rules/spaced-comment)
 
     ```javascript
-    
+
     // bad
     //is current tab
     const active = true;
@@ -2224,9 +2225,9 @@
 
       return element;
     }
- 
+
     ```
-  
+
   <a name="comments--actionitems"></a><a name="18.4"></a>
   - [18.4](#comments--actionitems) 如果想表明这个问题以后会再次被查看或者给出了这个问题的解决方案，在注释前加上前缀`FIXME`或者`TODO`会有利于很快理解问题. 这些不同于一般的注释因为它们是可操作的. 操作是 `FIXME: -- need to figure this out` 或 `TODO: -- need to implement`.
 
@@ -2665,7 +2666,7 @@
       'Batman',
       'Superman',
     ];
-    
+
     // bad
     function createHero(
       firstName,
@@ -2715,7 +2716,7 @@
       inventorOf,
       ...heroArgs
     );
-	
+
     ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -2782,10 +2783,10 @@
 
     ```javascript
     // => this.reviewScore = 9;
-	
-	// bad
+
+  // bad
     const totalScore = new String(this.reviewScore); // typeof totalScore is "object" not "string"
-    
+
     // bad
     const totalScore = this.reviewScore + ''; // invokes this.reviewScore.valueOf()
 
@@ -3126,7 +3127,7 @@
 ## 事件
 
   <a name="events--hash"></a><a name="25.1"></a>
-  - [25.1](#events--hash) 当将数据和事件绑定时 (不论是 DOM 事件还是其他像Backbone一类的事件), 传摘要值而不是原始值. 这会允许接下来的修改者不用查找和更新事件的每一个处理器就可以给事件添加更多的数据，不要使用下边的:
+  - [25.1](#events--hash) 当将数据和事件绑定时 (不论是 DOM 事件还是其他像Backbone一类的事件), 传递对象字面量(也叫摘要值)而不是原始值. 这会允许接下来的修改者不用查找和更新事件的每一个处理器就可以给事件添加更多的数据，不要使用下边的:
 
     ```javascript
     // bad
