@@ -391,18 +391,16 @@
     // good
     [1, 2, 3].map(x => x + 1);
 
-    // bad
-    const flat = {};
-    [[0, 1], [2, 3], [4, 5]].reduce((memo, item, index) => {
-      const flatten = memo.concat(item);
-      flat[index] = flatten;
+    // bad - no returned value means `acc` becomes undefined after the first iteration
+    [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
+      const flatten = acc.concat(item);
+      acc[index] = flatten;
     });
 
     // good
-    const flat = {};
-    [[0, 1], [2, 3], [4, 5]].reduce((memo, item, index) => {
-      const flatten = memo.concat(item);
-      flat[index] = flatten;
+    [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
+      const flatten = acc.concat(item);
+      acc[index] = flatten;
       return flatten;
     });
 
@@ -629,19 +627,19 @@
 
     ```javascript
     // bad
-  function foo() {
+    function foo() {
       // ...
-  }
+    }
 
-  // bad
-  const foo = function () {
+    // bad
+    const foo = function () {
       // ...
-  };
+    };
 
-  // good
-  const foo = function bar() {
+    // good
+    const foo = function bar() {
       // ...
-  };
+    };
 
     ```
 
@@ -804,7 +802,7 @@
   <a name="functions--mutate-params"></a><a name="7.12"></a>
   - [7.12](#functions--mutate-params) 不要改变参数. eslint: [`no-param-reassign`](http://eslint.org/docs/rules/no-param-reassign.html)
 
-    > 原因：操作参数中的对象可能在原始调用中造成意想不到的变量副作用.
+    > 原因：操作作为参数传入的对象可能在原始调用中造成意想不到的变量副作用.
 
     ```javascript
     // bad
@@ -947,22 +945,22 @@
     }));
 
     // No implicit return with side effects
-  function foo(callback) {
+    function foo(callback) {
       const val = callback();
       if (val === true) {
         // Do something if callback returns true
       }
-  }
+    }
 
-  let bool = false;
+    let bool = false;
 
-  // bad
-  foo(() => bool = true);
+    // bad
+    foo(() => bool = true);
 
-  // good
-  foo(() => {
+    // good
+    foo(() => {
       bool = true;
-  });
+    });
 
     ```
 
@@ -1039,7 +1037,24 @@
       return height > 256 ? largeSize : smallSize;
     };
     ```
+  <a name="whitespace--implicit-arrow-linebreak"></a>
+  - [8.6](#whitespace--implicit-arrow-linebreak) 注意有隐式返回函数体的箭头函数的位置. eslint: [`implicit-arrow-linebreak`](https://eslint.org/docs/rules/implicit-arrow-linebreak)
+  
+    ```javascript
+    // bad
+    (foo) =>
+      bar;
 
+    (foo) =>
+      (bar);
+
+    // good
+    (foo) => bar;
+    (foo) => (bar);
+    (foo) => (
+       bar
+    )
+    ```
 **[⬆ back to top](#table-of-contents)**
 
 
@@ -1265,7 +1280,7 @@
   <a name="modules--no-duplicate-imports"></a>
   - [10.4](#modules--no-duplicate-imports) 只允许在一个地方从一个路径import.
  eslint: [`no-duplicate-imports`](http://eslint.org/docs/rules/no-duplicate-imports)
-    > 原因：多行从同一个路径的import会使代码更难维护.
+    > 原因：有多行同一个路径的import会使代码更难维护.
 
     ```javascript
     // bad
@@ -1386,12 +1401,25 @@
 
     // good
     let sum = 0;
-    numbers.forEach(num => sum += num);
+    numbers.forEach((num) => {
+      sum += num;
+    });
     sum === 15;
 
-    // best (use the functional force)
-    const sum = numbers.reduce((total, num) => total + num, 0);
-    sum === 15;
+    // bad
+    const increasedByOne = [];
+    for (let i = 0; i < numbers.length; i++) {
+      increasedByOne.push(numbers[i] + 1);
+    }
+
+    // good
+    const increasedByOne = [];
+    numbers.forEach((num) => {
+      increasedByOne.push(num + 1);
+    });
+
+    // best (keeping it functional)
+    const increasedByOne = numbers.map(num => num + 1);
     ```
 
   <a name="generators--nope"></a><a name="11.2"></a>
@@ -1496,7 +1524,7 @@
 ## 变量
 
   <a name="variables--const"></a><a name="13.1"></a>
-  - [13.1](#variables--const) 总是使用 `const` 声明变量. 不这么做会导致全局变量问题. 要避免污染全局命名空间. eslint: [`no-undef`](http://eslint.org/docs/rules/no-undef) [`prefer-const`](http://eslint.org/docs/rules/prefer-const)
+  - [13.1](#variables--const) 总是使用 `const` 或者 `let` 声明变量. 不这么做会导致全局变量问题. 要避免污染全局命名空间. Captain Plannet警告过我们.eslint: [`no-undef`](http://eslint.org/docs/rules/no-undef) [`prefer-const`](http://eslint.org/docs/rules/prefer-const)
 
     ```javascript
     // bad
@@ -1507,7 +1535,7 @@
     ```
 
   <a name="variables--one-const"></a><a name="13.2"></a>
-  - [13.2](#variables--one-const) 每个变量声明前都要使用`const`. eslint: [`one-var`](http://eslint.org/docs/rules/one-var.html) jscs: [`disallowMultipleVarDecl`](http://jscs.info/rule/disallowMultipleVarDecl)
+  - [13.2](#variables--one-const) 每个变量声明前都要使用`const`或者`let`. eslint: [`one-var`](http://eslint.org/docs/rules/one-var.html) jscs: [`disallowMultipleVarDecl`](http://jscs.info/rule/disallowMultipleVarDecl)
 
     > 原因：这种方式更易添加变量声明，不用考虑将`;`变成`,`.用debugger逐个调试也很方便，而不是一次跳过所有变量.
 
@@ -1608,7 +1636,7 @@
       let a = b = c = 1;
     }());
 
-    console.log(a); // undefined
+    console.log(a); // throws ReferenceError
     console.log(b); // 1
     console.log(c); // 1
 
@@ -1619,17 +1647,17 @@
       let c = a;
     }());
 
-    console.log(a); // undefined
-    console.log(b); // undefined
-    console.log(c); // undefined
+    console.log(a); // throws ReferenceError
+    console.log(b); // throws ReferenceError
+    console.log(c); // throws ReferenceError
 
     // the same applies for `const`
     ```
 
   <a name="variables--unary-increment-decrement"></a><a name="13.6"></a>
-  - [13.6](#variables--unary-increment-decrement) 避免使用递增和递减一元运算符 (++, --). eslint [`no-plusplus`](http://eslint.org/docs/rules/no-plusplus)
+  - [13.6](#variables--unary-increment-decrement) 避免使用自增和自减一元运算符 (++, --). eslint [`no-plusplus`](http://eslint.org/docs/rules/no-plusplus)
 
-    > 原因:根据eslit文档,递增和递减一元运算符收到分号自动插入的影响可能在应用内部引发自增和自减值的隐蔽错误.用像`num += 1`的语句而不是`num++`或`num ++`来修改值更有表达力.禁止一元自增和自减语句也避免了前置自增/前置自减值在程序中引起的不可预期的行为的影响.
+    > 原因:根据eslint文档,自增和自减一元运算符收到分号自动插入的影响可能在应用内部引发自增和自减值的隐蔽错误.用像`num += 1`的语句而不是`num++`或`num ++`来修改值更有表达力.禁止一元自增和自减语句也避免了前置自增/前置自减值在程序中引起的不可预期的行为的副作用.
 
     ```javascript
     // bad
@@ -1659,6 +1687,29 @@
     const sum = array.reduce((a, b) => a + b, 0);
     const truthyCount = array.filter(Boolean).length;
     ```
+<a name="variables--linebreak"></a>
+  - [13.7](#variables--linebreak) 避免在赋值中的`=`前后换行. 如果要换行的话使用圆括号包裹 [`max-len`](https://eslint.org/docs/rules/max-len.html). eslint [`operator-linebreak`](https://eslint.org/docs/rules/operator-linebreak.html).
+
+    > 原因? `=`周围的换行会混淆赋值.
+
+    ```javascript
+    // bad
+    const foo =
+      superLongLongLongLongLongLongLongLongFunctionName();
+
+    // bad
+    const foo
+      = 'superLongLongLongLongLongLongLongLongString';
+
+    // good
+    const foo = (
+      superLongLongLongLongLongLongLongLongFunctionName()
+    );
+
+    // good
+    const foo = 'superLongLongLongLongLongLongLongLongString';
+    ```
+
 **[⬆ back to top](#table-of-contents)**
 
 
@@ -1770,22 +1821,22 @@
   <a name="comparison--if"></a><a name="15.2"></a>
   - [15.2](#comparison--if) 条件声明例如 `if` 会用 `ToBoolean` 这个抽象方法将表达式转成布尔值并遵循如下规则:
 
-    - **Objects** evaluate to **true**
-    - **Undefined** evaluates to **false**
-    - **Null** evaluates to **false**
-    - **Booleans** evaluate to **the value of the boolean**
-    - **Numbers** evaluate to **false** if **+0, -0, or NaN**, otherwise **true**
-    - **Strings** evaluate to **false** if an empty string `''`, otherwise **true**
+    - **Objects** 等于 **true**
+    - **Undefined** 等于 **false**
+    - **Null** 等于 **false**
+    - **Booleans** 等于 **布尔值**
+    - **Numbers** 在 **+0, -0, or NaN**的情况下等于**false**, 其他情况是 **true**
+    - **Strings** 为`''`时等于 **false** , 否则是 **true**
 
     ```javascript
     if ([0] && []) {
       // true
-      // an array (even an empty one) is an object, objects will evaluate to true
+      // 数组(即使是空数组)也是对象，对象等于true
     }
     ```
 
   <a name="comparison--shortcuts"></a><a name="15.3"></a>
-  - [15.3](#comparison--shortcuts) 对于布尔值使用简写，但对于字符串和数字要显示比较.
+  - [15.3](#comparison--shortcuts) 对于布尔值使用简写，但对于字符串和数字要显式比较.
 
     ```javascript
     // bad
@@ -1869,9 +1920,7 @@
     ```
 
   <a name="comparison--nested-ternaries"></a><a name="15.6"></a>
-  - [15.6](#comparison--nested-ternaries) 通常三元运算是单行表达式,不应该被嵌套.
-
-    eslint rules: [`no-nested-ternary`](http://eslint.org/docs/rules/no-nested-ternary.html).
+  - [15.6](#comparison--nested-ternaries) 通常三元运算是单行表达式,不应该被嵌套. eslint: [`no-nested-ternary`](http://eslint.org/docs/rules/no-nested-ternary.html).
 
     ```javascript
     // bad
@@ -1911,7 +1960,7 @@
   <a name="comparison--no-mixed-operators"></a>
   - [15.8](#comparison--no-mixed-operators) 声明语句中有多个运算符时用圆括号包裹运算符. 当有多个数学运算符时,不要混合 `**` 和 `%` 或者 `+`, `-`, `*`, `/`. eslint: [`no-mixed-operators`](https://eslint.org/docs/rules/no-mixed-operators.html)
 
-    > Why? This improves readability and clarifies the developer’s intention.
+    > 原因? 提高可读性并表明了开发者的意图.
 
     ```javascript
     // bad
@@ -2063,7 +2112,7 @@
 ## 控制语句
 
   <a name="control-statements"></a>
-  - [17.1](#control-statements) 一旦你的控制语句 (`if`, `while` 等.) 太长或者超出行宽最大长度,每一个(组)条件要被放到新行.逻辑运算符开始还是结束新行取决于你.
+  - [17.1](#control-statements) 一旦你的控制语句 (`if`, `while` 等.) 太长或者超出行宽最大长度,每一个(组)条件要被放到新行.逻辑运算符应该在写在行的开头.
 
     ```javascript
     // bad
@@ -2082,12 +2131,28 @@
       && bar === 'abc') {
       thing1();
     }
-
+    
+    // bad
+    if (
+      foo === 123 &&
+      bar === 'abc'
+    ) {
+      thing1();
+    }
+	
+	// good
+    if (
+      foo === 123
+      && bar === 'abc'
+    ) {
+      thing1();
+    }
+    
     // good
     if (
-      (foo === 123 || bar === "abc") &&
-      doesItLookGoodWhenItBecomesThatLong() &&
-      isThisReallyHappening()
+      (foo === 123 || bar === "abc")
+      && doesItLookGoodWhenItBecomesThatLong()
+      && isThisReallyHappening()
     ) {
       thing1();
     }
@@ -2096,21 +2161,17 @@
     if (foo === 123 && bar === 'abc') {
       thing1();
     }
-
+    ```
+  <a name="control-statement--value-selection"></a>
+  - [17.2](#control-statements--value-selection) 不要使用选择运算符代替控制语句.
+  
+    ```javascript
+    // bad
+    !isRunning && startRunning();
+ 
     // good
-    if (
-      foo === 123 &&
-      bar === 'abc'
-    ) {
-      thing1();
-    }
-
-    // good
-    if (
-      foo === 123
-      && bar === 'abc'
-    ) {
-      thing1();
+    if (!isRunning) {
+      startRunning();
     }
     ```
 
@@ -2139,13 +2200,10 @@
     /**
      * make() returns a new element
      * based on the passed in tag name
-     *
-     * @param {String} tag
-     * @return {Element} element
      */
     function make(tag) {
 
-      // ...stuff...
+      // ...
 
       return element;
     }
@@ -2352,24 +2410,24 @@
 
     ```javascript
     // bad
-    (function (global) {
-      // ...stuff...
-    })(this);
+    import { es6 } from './AirbnbStyleGuide';
+      // ...
+    export default es6;
     ```
 
     ```javascript
     // bad
-    (function (global) {
-      // ...stuff...
-    })(this);↵
+    import { es6 } from './AirbnbStyleGuide';
+      // ...
+    export default es6;↵
     ↵
     ```
 
     ```javascript
     // good
-    (function (global) {
-      // ...stuff...
-    })(this);↵
+    import { es6 } from './AirbnbStyleGuide';
+      // ...
+    export default es6;↵
     ```
 
   <a name="whitespace--chains"></a><a name="19.6"></a>
@@ -2474,7 +2532,7 @@
     ```
 
   <a name="whitespace--padded-blocks"></a><a name="19.8"></a>
-  - [19.8](#whitespace--padded-blocks) 不用再代码块中使用空行填充. eslint: [`padded-blocks`](http://eslint.org/docs/rules/padded-blocks.html) jscs:  [`disallowPaddingNewlinesInBlocks`](http://jscs.info/rule/disallowPaddingNewlinesInBlocks)
+  - [19.8](#whitespace--padded-blocks) 不要在代码块中使用空行填充. eslint: [`padded-blocks`](http://eslint.org/docs/rules/padded-blocks.html) jscs:  [`disallowPaddingNewlinesInBlocks`](http://jscs.info/rule/disallowPaddingNewlinesInBlocks)
 
     ```javascript
     // bad
@@ -2584,6 +2642,94 @@
       .done(() => console.log('Congratulations!'))
       .fail(() => console.log('You have failed this city.'));
     ```
+  <a name="whitespace--block-spacing"></a>
+  - [19.13](#whitespace--block-spacing) 在同一行中开放代码块的内部开始和结束的部分空格数保持一致. 此规则亦适用于单行的闭合代码块. eslint: [`block-spacing`](https://eslint.org/docs/rules/block-spacing)
+
+    ```javascript
+    // bad
+    function foo() {return true;}
+    if (foo) { bar = 0;}
+
+    // good
+    function foo() { return true; }
+    if (foo) { bar = 0; }
+    ```
+
+  <a name="whitespace--comma-spacing"></a>
+  - [19.14](#whitespace--comma-spacing) 逗号前不要加空格，逗号后要加空格. eslint: [`comma-spacing`](https://eslint.org/docs/rules/comma-spacing)
+
+    ```javascript
+    // bad
+    var foo = 1,bar = 2;
+    var arr = [1 , 2];
+
+    // good
+    var foo = 1, bar = 2;
+    var arr = [1, 2];
+    ```
+  <a name="whitespace--computed-property-spacing"></a>
+  - [19.15](#whitespace--computed-property-spacing) Enforce spacing inside of computed properties. eslint: [`computed-property-spacing`](https://eslint.org/docs/rules/computed-property-spacing)
+
+    ```javascript
+    // bad
+    obj[foo ]
+    obj[ 'foo']
+    var x = {[ b ]: a}
+    obj[foo[ bar ]]
+
+    // good
+    obj[foo]
+    obj['foo']
+    var x = { [b]: a }
+    obj[foo[bar]]
+    ```
+
+  <a name="whitespace--func-call-spacing"></a>
+  - [19.16](#whitespace--func-call-spacing) 在函数名和调用间不要加空格. eslint: [`func-call-spacing`](https://eslint.org/docs/rules/func-call-spacing)
+
+    ```javascript
+    // bad
+    func ();
+
+    func
+    ();
+
+    // good
+    func();
+    ```
+<a name="whitespace--key-spacing"></a>
+  - [19.17](#whitespace--key-spacing) 对象字面量属性的键和值之间要强制使用空格. eslint: [`key-spacing`](https://eslint.org/docs/rules/key-spacing)
+
+    ```javascript
+    // bad
+    var obj = { "foo" : 42 };
+    var obj2 = { "foo":42 };
+
+    // good
+    var obj = { "foo": 42 };
+    ```
+
+  <a name="whitespace--no-trailing-spaces"></a>
+  - [19.18](#whitespace--no-trailing-spaces) 避免行末尾的空格. eslint: [`no-trailing-spaces`](https://eslint.org/docs/rules/no-trailing-spaces)
+
+  <a name="whitespace--no-multiple-empty-lines"></a>
+  - [19.19](#whitespace--no-multiple-empty-lines) 避免多个空行，只允许文件末尾出现一个新行. eslint: [`no-multiple-empty-lines`](https://eslint.org/docs/rules/no-multiple-empty-lines)
+
+    <!-- markdownlint-disable MD012 -->
+    ```javascript
+    // bad
+    var x = 1;
+
+
+
+    var y = 2;
+
+    // good
+    var x = 1;
+
+    var y = 2;
+    ```
+    <!-- markdownlint-enable MD012 -->
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -2710,7 +2856,7 @@
     );
 
     // good (note that a comma must not appear after a "rest" element)
-    createHero(
+    function createHero(
       firstName,
       lastName,
       inventorOf,
@@ -2784,7 +2930,7 @@
     ```javascript
     // => this.reviewScore = 9;
 
-  // bad
+    // bad
     const totalScore = new String(this.reviewScore); // typeof totalScore is "object" not "string"
 
     // bad
@@ -2871,12 +3017,12 @@
     ```javascript
     // bad
     function q() {
-      // ...stuff...
+      // ...
     }
 
     // good
     function query() {
-      // ..stuff..
+      // ..
     }
     ```
 
@@ -3050,6 +3196,43 @@
       // ...
     ];
     ```
+  <a name="naming--uppercase"></a>
+  - [23.10](#naming--uppercase) 可以在以下情况把一个常量全部大写(1) 被导出, (2) `const`声明的 (不能被重新赋值), (3) 开发者相信该变量(内部嵌套的属性)不会改变.
+
+    > 原因? 这对于开发者不确定变量是否会改变的情形下的额外的辅助工具. UPPERCASE_VARIABLES 能让开发者明确该变量(和它的属性)无法改变.
+    - 所有用`const` 声明的变量呢? - 没必要，所以一个文件内的常量没必要用大写. 然而在导出常量的时候应该使用大写.
+    - 导出的对象呢? - 只对导出对象的顶层使用大写(如 `EXPORTED_OBJECT.key`) 保证嵌套的属性都不会改变.
+
+    ```javascript
+    // bad
+    const PRIVATE_VARIABLE = 'should not be unnecessarily uppercased within a file';
+
+    // bad
+    export const THING_TO_BE_CHANGED = 'should obviously not be uppercased';
+
+    // bad
+    export let REASSIGNABLE_VARIABLE = 'do not use let with uppercase variables';
+
+    // ---
+
+    // allowed but does not supply semantic value
+    export const apiKey = 'SOMEKEY';
+
+    // better in most cases
+    export const API_KEY = 'SOMEKEY';
+
+    // ---
+
+    // bad - unnecessarily uppercases key while adding no semantic value
+    export const MAPPING = {
+      KEY: 'value'
+    };
+
+    // good
+    export const MAPPING = {
+      key: 'value'
+    };
+    ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -3060,7 +3243,7 @@
   - [24.1](#accessors--not-required) 属性的存取器不是必需的.
 
   <a name="accessors--no-getters-setters"></a><a name="24.2"></a>
-  - [24.2](#accessors--no-getters-setters) 不要使用JavaScript getters/setters 因为可能引起不可预期的副作用很难测试维护和理解. 相反，如果要使用存取器函数，使用 getVal() 和 setVal('hello').
+  - [24.2](#accessors--no-getters-setters) 不要使用JavaScript getters/setters 因为可能引起不可预期的副作用,很难测试、维护和理解. 相反，如果要使用存取器函数，使用 getVal() 和 setVal('hello').
 
     ```javascript
     // bad
@@ -3249,8 +3432,9 @@
 9. [剩余运算符](#es6-rest)
 10. [数组展开](#es6-array-spreads)
 11. [Let 和 Const](#references)
-12. [迭代器和生成器](#iterators-and-generators)
-13. [模块](#modules)
+12. [求幂运算符](#es2016-properties--exponentiation-operator)
+13. [迭代器和生成器](#iterators-and-generators)
+14. [模块](#modules)
 
   <a name="tc39-proposals"></a>
   - [28.2](#tc39-proposals) 不要使用[TC39 proposals](https://github.com/tc39/proposals)还未实现的stage3的功能.
@@ -3301,7 +3485,7 @@
 ## 测试
 
   <a name="testing--yup"></a><a name="30.1"></a>
-  - [30.1](#testing--yup) **需要**
+  - [30.1](#testing--yup) **当然需要**
 
     ```javascript
     function foo() {
@@ -3340,7 +3524,7 @@
 
 **学习 ES6**
 
-  - [Draft ECMA 2015 (ES6) Spec](https://people.mozilla.org/~jorendorff/es6-draft.html)
+  - [Latest ECMA spec](https://tc39.github.io/ecma262/)
   - [ExploringJS](http://exploringjs.com/)
   - [ES6 Compatibility Table](https://kangax.github.io/compat-table/es6/)
   - [Comprehensive Overview of ES6 Features](http://es6-features.org/)
@@ -3352,15 +3536,16 @@
 **工具**
 
   - Code Style Linters
-    + [ESlint](http://eslint.org/) - [Airbnb Style .eslintrc](https://github.com/airbnb/javascript/blob/master/linters/.eslintrc)
-    + [JSHint](http://jshint.com/) - [Airbnb Style .jshintrc](https://github.com/airbnb/javascript/blob/master/linters/.jshintrc)
-    + [JSCS](https://github.com/jscs-dev/node-jscs) - [Airbnb Style Preset](https://github.com/jscs-dev/node-jscs/blob/master/presets/airbnb.json)
+    - [ESlint](http://eslint.org/) - [Airbnb Style .eslintrc](https://github.com/airbnb/javascript/blob/master/linters/.eslintrc)
+    - [JSHint](http://jshint.com/) - [Airbnb Style .jshintrc](https://github.com/airbnb/javascript/blob/master/linters/.jshintrc)
+    - Neutrino preset - [neutrino-preset-airbnb-base](https://neutrino.js.org/presets/neutrino-preset-airbnb-base/)
 
 **其他编码规范指南**
 
   - [Google JavaScript Style Guide](https://google.github.io/styleguide/javascriptguide.xml)
   - [jQuery Core Style Guidelines](http://contribute.jquery.org/style-guide/js/)
   - [Principles of Writing Consistent, Idiomatic JavaScript](https://github.com/rwaldron/idiomatic.js)
+  - [StandardJS](https://standardjs.com)
 
 **其他风格**
 
@@ -3406,7 +3591,6 @@
   - [Perfection Kills](http://perfectionkills.com/)
   - [Ben Alman](http://benalman.com/)
   - [Dmitry Baranovskiy](http://dmitry.baranovskiy.com/)
-  - [Dustin Diaz](http://dustindiaz.com/)
   - [nettuts](http://code.tutsplus.com/?s=javascript)
 
 **播客**
@@ -3421,7 +3605,8 @@
   这是一份使用这份编码规范的组织列表.给我们提PR我们会把你加到这份列表里.
 
   This is a list of organizations that are using this style guide. Send us a pull request and we'll add you to the list.
-
+  
+  - **123erfasst**: [123erfasst/javascript](https://github.com/123erfasst/javascript)
   - **3blades**: [3Blades/javascript](https://github.com/3blades/javascript)
   - **4Catalyzer**: [4Catalyzer/javascript](https://github.com/4Catalyzer/javascript)
   - **Aan Zee**: [AanZee/javascript](https://github.com/AanZee/javascript)
@@ -3548,7 +3733,7 @@
 
 (The MIT License)
 
-Copyright (c) 2014-2016 Airbnb
+Copyright (c) 2012 Airbnb
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -3568,7 +3753,6 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 **[⬆ back to top](#table-of-contents)**
 
 ## 修改
