@@ -1,7 +1,7 @@
 # Airbnb React/JSX Style Guide
 
 *合理书写React和JSX*
-
+该规范基于目前流行的JavaScript标准.尽管一些习惯要视情况而定来允许或禁止(如async/await或者静态的类字段).现阶段,任何超过stage 3的写法均不在此规范中且不推荐使用
 ## 内容
 
   1. [基本规则](#基本规则)
@@ -412,13 +412,13 @@
   可能的话过滤掉不必要的属性. 使用 [prop-types-exact](https://www.npmjs.com/package/prop-types-exact) 来避免bug.
 
   ```jsx
-  //good
+  // good
   render() {
     const { irrelevantProp, ...relevantProps  } = this.props;
     return <WrappedComponent {...relevantProps} />
   }
 
-  //bad
+  // bad
   render() {
     const { irrelevantProp, ...relevantProps  } = this.props;
     return <WrappedComponent {...this.props} />
@@ -427,7 +427,7 @@
 
 ## 引用
 
-  - 要使用引用回调函数. eslint: [`react/no-string-refs`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md)
+  - 要使用回调函数作为引用. eslint: [`react/no-string-refs`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md)
 
     ```jsx
     // bad
