@@ -1,7 +1,7 @@
 # Airbnb React/JSX Style Guide
 
 *合理书写React和JSX*
-该规范基于目前流行的JavaScript标准.尽管一些习惯要视情况而定来允许或禁止(如async/await或者静态的类字段).现阶段,任何超过stage 3的写法均不在此规范中且不推荐使用
+该规范基于目前流行的JavaScript标准.尽管一些习惯要视情况来允许或禁止(如async/await或者静态的类字段).现阶段,任何超过stage 3的写法均不在此规范中且不推荐使用.
 ## 内容
 
   1. [基本规则](#基本规则)
@@ -146,7 +146,7 @@
     ```
 ## 声明
 
-  - 不要使用 `displayName` 命名模块. 要通过引用来命名.
+  - 不要使用 `displayName` 命名组件. 要通过引用来命名.
 
     ```jsx
     // bad
@@ -185,6 +185,26 @@
     >
       <Quux />
     </Foo>
+    
+    // bad
+    {showButton &&
+      <Button />
+    }
+
+    // bad
+    {
+      showButton &&
+        <Button />
+    }
+
+    // good
+    {showButton && (
+      <Button />
+    )}
+
+    // good
+    {showButton && <Button />}
+
     ```
 
 ## 引号
@@ -550,7 +570,7 @@
     ```
 
   - React组件的内部方法不要使用下划线前缀.
-  > 原因：下划线前缀有时被其他语言用来表示私有性.但是JavaScript不一样，它并不支持私有性(priviate)，所有的都是公开的(public). 不管你怎么想, 属性添加下划线前缀并不会使其真正私有化, 任何属性 (无论是否有下划线前缀) 都应被视为公开的. 参考issues #1024和#490更多的讨论.
+  > 原因：下划线前缀有时被其他语言用来表示私有性.但是JavaScript不一样，它并不支持私有性(priviate)，所有的都是公开的(public). 不管你怎么想, 属性添加下划线前缀并不会使其真正私有化, 任何属性 (无论是否有下划线前缀) 都应被视为公开的. 参考[#1024](https://github.com/airbnb/javascript/issues/1024)和[#490](https://github.com/airbnb/javascript/issues/490)更多的讨论.
 
     ```jsx
     // bad
@@ -664,7 +684,7 @@
 
   - 不要使用 `isMounted`. eslint: [`react/no-is-mounted`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-is-mounted.md)
 
-  > 原因： [`isMounted`是反模式][反模式], 当使用ES6的时候不可用,正逐渐被官方废弃.
+  > 原因： [`isMounted` 是反模式][anti-pattern], 当使用ES6的时候不可用,正逐渐被官方废弃.
 
   [anti-pattern]: https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html
 I
