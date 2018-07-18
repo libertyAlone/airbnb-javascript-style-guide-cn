@@ -2,6 +2,8 @@
 
 *个人翻译，一些个人见解会用"注："的形式标出*
 
+原版:[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
+
 *最合理的方法书写JavaScript*
 
 > **注意**: 本规范假定你在使用 [Babel](https://babeljs.io), 并且希望你使用 [babel-preset-airbnb](https://npmjs.com/babel-preset-airbnb) 或者等价的工具. 预期你已经在应用中安装了shims/polyfills,和 [airbnb-browser-shims](https://npmjs.com/airbnb-browser-shims) 或者等价的.

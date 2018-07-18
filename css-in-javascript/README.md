@@ -1,6 +1,6 @@
 # Airbnb CSS-in-JavaScript编码规范
 
-*合理的方式书写CSS-in-JavaScript
+*合理的方式书写CSS-in-JavaScript*
 
 ## 内容
 
