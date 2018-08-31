@@ -3620,7 +3620,7 @@
   - Code Style Linters
     - [ESlint](http://eslint.org/) - [Airbnb Style .eslintrc](https://github.com/airbnb/javascript/blob/master/linters/.eslintrc)
     - [JSHint](http://jshint.com/) - [Airbnb Style .jshintrc](https://github.com/airbnb/javascript/blob/master/linters/.jshintrc)
-    - Neutrino preset - [neutrino-preset-airbnb-base](https://neutrino.js.org/presets/neutrino-preset-airbnb-base/)
+    - Neutrino preset - [@neutrinojs/airbnb](https://neutrinojs.org/packages/airbnb/)
 
 **其他编码规范指南**
 
