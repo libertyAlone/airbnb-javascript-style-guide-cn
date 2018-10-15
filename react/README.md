@@ -75,7 +75,7 @@
   
 ## 命名
 
-  - **文件后缀**: React组件使用`.jsx`后缀.
+  - **文件后缀**: React组件使用`.jsx`后缀.  eslint: [`react/jsx-filename-extension`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-filename-extension.md)
   - **文件名**: 文件名使用帕斯卡风格. 如 `ReservationCard.jsx`.
   - **引用命名**: React组件使用帕斯卡风格，组件实例使用驼峰风格. eslint: [`react/jsx-pascal-case`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md)
 
@@ -344,7 +344,11 @@
   <div />
   ```
 
-  - 避免使用数组的索引作为 `key` 属性值, 建议使用唯一的ID. ([为什么?](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318))
+  - 避免使用数组的索引作为 `key` 属性值, 建议使用稳定的ID. eslint: [`react/no-array-index-key`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-array-index-key.md)
+
+> 原因? 不使用稳定的ID会对性能产生副作用并且组件状态会出问题 [是一种反模式](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318).
+
+如果元素顺序可能改变的话我们不建议使用索引来作为key.
 
   ```jsx
   // bad

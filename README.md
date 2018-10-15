@@ -279,7 +279,7 @@
   ```
 
   <a name="objects--prototype-builtins">
-  - [3.7](#objects--prototype-builtins) 不要直接使用`Object.prototype`,`hasOwnProperty`, `propertyIsEnumerable`和 `isPrototypeOf`方法.
+  - [3.7](#objects--prototype-builtins) 不要直接使用`Object.prototype`,`hasOwnProperty`, `propertyIsEnumerable`和 `isPrototypeOf`方法.  eslint: [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
 
   >  原因：这些方法可能会被对象自身的同名属性覆盖 - 比如`{ hasOwnProperty: false }`或者对象是null(`Object.create(null)`).
 
@@ -1573,7 +1573,7 @@
     ```
 
   <a name="variables--one-const"></a><a name="13.2"></a>
-  - [13.2](#variables--one-const) 每个变量声明前都要使用`const`或者`let`. eslint: [`one-var`](http://eslint.org/docs/rules/one-var.html) jscs: [`disallowMultipleVarDecl`](http://jscs.info/rule/disallowMultipleVarDecl)
+  - [13.2](#variables--one-const) 每个变量的声明或赋值都要使用`const`或者`let`. eslint: [`one-var`](http://eslint.org/docs/rules/one-var.html)
 
     > 原因：这种方式更易添加变量声明，不用考虑将`;`变成`,`.用debugger逐个调试也很方便，而不是一次跳过所有变量.
 
@@ -3751,6 +3751,8 @@
   - **Orion Health**: [orionhealth/javascript](https://github.com/orionhealth/javascript)
   - **OutBoxSoft**: [OutBoxSoft/javascript](https://github.com/OutBoxSoft/javascript)
   - **Peerby**: [Peerby/javascript](https://github.com/Peerby/javascript)
+  - **Pier 1**: [Pier1/javascript](https://github.com/pier1/javascript)
+  - **Qotto**: [Qotto/javascript-style-guide](https://github.com/Qotto/javascript-style-guide)
   - **Razorfish**: [razorfish/javascript-style-guide](https://github.com/razorfish/javascript-style-guide)
   - **reddit**: [reddit/styleguide/javascript](https://github.com/reddit/styleguide/tree/master/javascript)
   - **React**: [facebook.github.io/react/contributing/how-to-contribute.html#style-guide](https://facebook.github.io/react/contributing/how-to-contribute.html#style-guide)
