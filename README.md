@@ -6,13 +6,15 @@
 
 *最合理的方法书写JavaScript*
 
-> **注意**: 本规范假定你在使用 [Babel](https://babeljs.io), 并且希望你使用 [babel-preset-airbnb](https://npmjs.com/babel-preset-airbnb) 或者等价的工具. 预期你已经在应用中安装了shims/polyfills,和 [airbnb-browser-shims](https://npmjs.com/airbnb-browser-shims) 或者等价的.
+> **注意**: 本规范假定你在使用 [Babel](https://babeljs.io), 并且需要你使用 [babel-preset-airbnb](https://npmjs.com/babel-preset-airbnb) 或者等价的工具. 预期你已经在应用中安装了shims/polyfills,和 [airbnb-browser-shims](https://npmjs.com/airbnb-browser-shims) 或者等价的.
 
-* 其他翻译:
+其他编码风格指南:
 
-  - [Airbnb CSS/Sass规范](https://github.com/libertyAlone/airbnb-javascript-style-guide-cn/tree/master/css)
-
-  - [Airbnb css-in-javascript规范](https://github.com/libertyAlone/airbnb-javascript-style-guide-cn/tree/master/css-in-javascript)
+- [ES5 (Deprecated)](https://github.com/airbnb/javascript/tree/es5-deprecated/es5)
+- [React](react/)
+- [CSS-in-JavaScript](css-in-javascript/)
+- [CSS & Sass](https://github.com/airbnb/css)
+- [Ruby](https://github.com/airbnb/ruby)
 
 ## 内容
 1. [类型](#类型)
@@ -75,10 +77,10 @@
 
     console.log(foo, bar); // => 1, 9
     ```
-    - Symbols不能被完全polyfill,所以不能用于无法被本地支持该特性的浏览器/环境.
+    - Symbols不能被完全polyfill,所以不能用于无法被原生支持该特性的浏览器/环境.
 
   <a name="types--complex"></a><a name="1.2"></a>
-  - [1.2](#types--complex)  **复杂类型**: 存取复杂类型作用于值的引用.
+  - [1.2](#types--complex)  **复杂类型**: 访问复杂类型作用于值的引用.
 
     - `object`
     - `array`
@@ -100,7 +102,7 @@
   <a name="references--prefer-const"></a><a name="2.1"></a>
   - [2.1](#references--prefer-const) 对引用使用`const`;避免使用`var`.eslint: [`prefer-const`](http://eslint.org/docs/rules/prefer-const.html), [`no-const-assign`](http://eslint.org/docs/rules/no-const-assign.html)
 
-    > 原因：会确保你不会改变引用的指向，否则可能会产生bug并且使代码难以理解
+    > 原因：会确保你不会改变引用的指向，否则可能会产生bug并且使代码难以理解.
 
     ```javascript
     // bad
@@ -115,7 +117,7 @@
   <a name="references--disallow-var"></a><a name="2.2"></a>
   - [2.2](#references--disallow-var) 如果一定要改变引用的指向，使用 `let` 而非 `var`.eslint: [`no-var`](http://eslint.org/docs/rules/no-var.html) jscs: [`disallowVar`](http://jscs.info/rule/disallowVar)
 
-    > 原因：`let`是块级作用域而`var`是函数作用域.
+    > 原因：`let`是块级作用域而非像`var`一样是函数作用域.
 
     ```javascript
     // bad
@@ -211,7 +213,7 @@
   <a name="es6-object-concise"></a><a name="3.4"></a>
   - [3.4](#es6-object-concise) 使用简写属性值. eslint: [`object-shorthand`](http://eslint.org/docs/rules/object-shorthand.html) jscs: [`requireEnhancedObjectLiterals`](http://jscs.info/rule/requireEnhancedObjectLiterals)
 
-    > 原因：书写描述更简短.
+    > 原因：更简短且描述更清楚.
 
     ```javascript
     const lukeSkywalker = 'Luke Skywalker';
@@ -299,7 +301,7 @@
   ```
 
   <a name="objects--rest-spread"></a>
-  - [3.8](#objects--rest-spread) 优先使用对象展开运算符而不是对象浅拷贝[`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). 使用对象剩余运算符来获得新的有具体省略的对象.
+  - [3.8](#objects--rest-spread) 优先使用对象展开运算符而不是对象浅拷贝[`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). 使用对象剩余运算符来获得新的有具体被省略属性的对象.
 
     ```javascript
     // very bad
@@ -333,7 +335,7 @@
     ```
 
   <a name="arrays--push"></a><a name="4.2"></a>
-  - [4.2](#arrays--push) 使用 [Array#push](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/push) 而不是直接给数组赋值.
+  - [4.2](#arrays--push) 使用 [Array#push](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/push) 而不是直接给数组添加新项.
 
     ```javascript
     const someStack = [];
@@ -363,7 +365,7 @@
     ```
 
   <a name="arrays--from"></a><a name="4.4"></a>
-  - [4.4](#arrays--from) 将可迭代对象转换成数组使用扩展运算符`...`代替[Array.from](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from).
+  - [4.4](#arrays--from) 将可迭代对象转换成数组使用扩展运算符`...`而不是[Array.from](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from).
 
     ```javascript
     const foo = document.querySelectorAll('.foo');
@@ -446,7 +448,6 @@
     ```
   <a name="arrays--bracket-newline"></a>
   - [4.8](#arrays--bracket-newline) 如果一个数组有多行则要在数组的开括号后和闭括号前使用新行
-
 
     ```javascript
     // bad
@@ -666,7 +667,7 @@
   <a name="functions--iife"></a><a name="7.2"></a>
   - [7.2](#functions--iife) 用圆括号包裹自执行匿名函数. eslint: [`wrap-iife`](http://eslint.org/docs/rules/wrap-iife.html)
 
-    > 原因：一个立即执行匿名函数表达式是一个单一的单元-括号清楚地表达了它包含函数自身和调用括号的意思.注意,在到处倒是模块的世界中几乎不需要IIFE.
+    > 原因：一个立即执行匿名函数表达式是一个单一的单元-括号清楚地表达了它包含函数自身和调用括号的意思.注意,在到处都是模块的世界中几乎不需要IIFE.
 
     ```javascript
     // immediately-invoked function expression (IIFE)
@@ -714,7 +715,7 @@
     ```
 
   <a name="es6-rest"></a><a name="7.6"></a>
-  - [7.6](#es6-rest) 不要使用 `arguments`, 使用扩展语法 `...` . eslint: [`prefer-rest-params`](http://eslint.org/docs/rules/prefer-rest-params)
+  - [7.6](#es6-rest) 不要使用 `arguments`, 使用其余运算符 `...` . eslint: [`prefer-rest-params`](http://eslint.org/docs/rules/prefer-rest-params)
 
     > 原因：`...`是你想获得的参数列表，因此，扩展语法的参数是真正的数组，而`arguments`是类数组.
 
@@ -861,7 +862,7 @@
     ```
 
   <a name="functions--spread-vs-apply"></a><a name="7.14"></a>
-  - [7.14](#functions--spread-vs-apply) 调用可变参数函数时建议使用扩展运算符`...`. eslint: [`prefer-spread`](http://eslint.org/docs/rules/prefer-spread)
+  - [7.14](#functions--spread-vs-apply) 调用可变参数函数时建议使用展开运算符`...`. eslint: [`prefer-spread`](http://eslint.org/docs/rules/prefer-spread)
 
     > 原因：显然你无需使用上下文，很难结合`new`和`apply`.
 
@@ -939,7 +940,7 @@
     ```
 
   <a name="arrows--implicit-return"></a><a name="8.2"></a>
-  - [8.2](#arrows--implicit-return) 如果函数体只包含一条返回[表达式](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Expressions)的语句，可以省略花括号并使用隐式的return. 否则保留花括号并使用`return`语句. eslint: [`arrow-parens`](http://eslint.org/docs/rules/arrow-parens.html), [`arrow-body-style`](http://eslint.org/docs/rules/arrow-body-style.html)
+  - [8.2](#arrows--implicit-return) 如果函数体只包含一条没有副作用的返回[表达式](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Expressions)的语句，可以省略花括号并使用隐式的return. 否则保留花括号并使用`return`语句. eslint: [`arrow-parens`](http://eslint.org/docs/rules/arrow-parens.html), [`arrow-body-style`](http://eslint.org/docs/rules/arrow-body-style.html)
 
     > 原因：语法糖.当进行多个函数的链式操作时可读性好.
 
@@ -1008,7 +1009,7 @@
     ```
 
   <a name="arrows--one-arg-parens"></a><a name="8.4"></a>
-  - [8.4](#arrows--one-arg-parens) 函数如果只有一个参数并且没用花括号，则省略圆括号. 否则为了清晰明确总是使用圆括号包裹参数.注意:总是使用圆括号也是可以接受的，eslint中的["always"选项](http://eslint.org/docs/rules/arrow-parens#always).eslint: [`arrow-parens`](http://eslint.org/docs/rules/arrow-parens.html)
+  - [8.4](#arrows--one-arg-parens) 函数如果只接收一个参数并且没使用用花括号，则省略圆括号. 否则为了清晰明确总是使用圆括号包裹参数.注意:总是使用圆括号也是可以接受的，eslint中的["always"选项](http://eslint.org/docs/rules/arrow-parens#always).eslint: [`arrow-parens`](http://eslint.org/docs/rules/arrow-parens.html)
 
     > 原因：看上去不混乱.
 
@@ -1282,7 +1283,7 @@
     ```
 
   <a name="modules--no-export-from-import"></a><a name="10.3"></a>
-  - [10.3](#modules--no-export-from-import) 不要从import中export.
+  - [10.3](#modules--no-export-from-import) 不要直接export从import中导入的模块.
 
     > 原因：很显然有一个明确的方法来import和export会保持一致性.
 
@@ -1385,7 +1386,7 @@
     ```
 
   <a name="modules--no-webpack-loader-syntax"></a>
-  - [10.9](#modules--no-webpack-loader-syntax) 在模块import声明中禁止Webpack的加载器语法.
+  - [10.9](#modules--no-webpack-loader-syntax) 在模块import声明中禁止使用Webpack的加载器语法.
  eslint: [`import/no-webpack-loader-syntax`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-webpack-loader-syntax.md)
     > 原因:在import中使用Webpack语法会导致代码耦合到模块绑定中。建议在`webpack.config.js`中使用加载器语法.
 
@@ -1405,7 +1406,7 @@
   <a name="iterators--nope"></a><a name="11.1"></a>
   - [11.1](#iterators--nope) 不要使用迭代器.建议使用JS更高优先级的函数代替`for-in` 或 `for-of`循环. eslint: [`no-iterator`](http://eslint.org/docs/rules/no-iterator.html) [`no-restricted-syntax`](http://eslint.org/docs/rules/no-restricted-syntax)
 
-    > 原因：这会强化不可变的规则.处理返回值的纯函数要比消除副作用容易.
+    > 原因：这会强化不可变的规则.使用带返回值的纯函数很容易消除副作用.
 
     > 使用 `map()` / `every()` / `filter()` / `find()` / `findIndex()` / `reduce()` / `some()` / ... 来遍历数组, 用 `Object.keys()` / `Object.values()` / `Object.entries()` 来制造数组以便能对对象进行迭代.
 
@@ -1449,7 +1450,7 @@
     > 原因：不能很好地翻译为ES5.
 
   <a name="generators--spacing"></a>
-  - [11.3](#generators--spacing) 如果你非得使用生成器或者无视 [建议](#generators--nope), 请确保函数签名中的空格正确. eslint: [`generator-star-spacing`](http://eslint.org/docs/rules/generator-star-spacing)
+  - [11.3](#generators--spacing) 如果你非得使用生成器或者无视 [建议](#generators--nope), 请确保函数签名中的空格位置正确. eslint: [`generator-star-spacing`](http://eslint.org/docs/rules/generator-star-spacing)
 
     > 原因：`function` 和 `*`是同一个概念 - `*`不是`function`的修饰符，`function*是不同于`function`的独特的构造函数`.
 
@@ -1695,7 +1696,7 @@
   <a name="variables--unary-increment-decrement"></a><a name="13.6"></a>
   - [13.6](#variables--unary-increment-decrement) 避免使用自增和自减一元运算符 (++, --). eslint [`no-plusplus`](http://eslint.org/docs/rules/no-plusplus)
 
-    > 原因:根据eslint文档,自增和自减一元运算符收到分号自动插入的影响可能在应用内部引发自增和自减值的隐蔽错误.用像`num += 1`的语句而不是`num++`或`num ++`来修改值更有表达力.禁止一元自增和自减语句也避免了前置自增/前置自减值在程序中引起的不可预期的行为的副作用.
+    > 原因:根据eslint文档,自增和自减一元运算符受到分号自动插入的影响可能在应用内部引发自增和自减值的隐蔽错误.用像`num += 1`的语句而不是`num++`或`num ++`来修改值更有表达力.禁止一元自增和自减语句也避免了前置自增/前置自减值在程序中引起的不可预期的行为的副作用.
 
     ```javascript
     // bad
@@ -2019,7 +2020,7 @@
     ```
 
   <a name="comparison--unneeded-ternary"></a><a name="15.7"></a>
-  - [15.7](#comparison--unneeded-ternary) 避免不必要的三元表达式.
+  - [15.7](#comparison--unneeded-ternary) 避免不必要的三元运算符.
 
     eslint rules: [`no-unneeded-ternary`](http://eslint.org/docs/rules/no-unneeded-ternary.html).
 
@@ -2035,9 +2036,9 @@
     const baz = !c;
     ```
   <a name="comparison--no-mixed-operators"></a>
-  - [15.8](#comparison--no-mixed-operators) 声明语句中有多个运算符时用圆括号包裹运算符. 当有多个数学运算符时,不要混合 `**` 和 `%` 或者 `+`, `-`, `*`, `/`. eslint: [`no-mixed-operators`](https://eslint.org/docs/rules/no-mixed-operators.html)
+  - [15.8](#comparison--no-mixed-operators) 声明语句中有多个运算符时用圆括号包裹运算符. 唯一例外是标准算数运算符 (`+`, `-`, `*`, & `/`) 因为它们的优先级基本都知道. eslint: [`no-mixed-operators`](https://eslint.org/docs/rules/no-mixed-operators.html)
 
-    > 原因? 提高可读性并表明了开发者的意图.
+    > 原因. 提高可读性并表明了开发者的意图.
 
     ```javascript
     // bad
@@ -2241,7 +2242,7 @@
     }
     ```
   <a name="control-statement--value-selection"></a>
-  - [17.2](#control-statements--value-selection) 不要使用选择运算符代替控制语句.
+  - [17.2](#control-statements--value-selection) 不要使用短路运算符代替控制语句.
   
     ```javascript
     // bad
@@ -2258,7 +2259,7 @@
 ## 注释
 
   <a name="comments--multiline"></a><a name="18.1"></a>
-  - [18.1](#comments--multiline) 多行注释使用 `/** ... */` . 包含描述，指定所有参数的类型和值和返回值.
+  - [18.1](#comments--multiline) 多行注释使用 `/** ... */` .
 
     ```javascript
     // bad
@@ -2365,7 +2366,7 @@
     ```
 
   <a name="comments--actionitems"></a><a name="18.4"></a>
-  - [18.4](#comments--actionitems) 如果想表明这个问题以后会再次被查看或者给出了这个问题的解决方案，在注释前加上前缀`FIXME`或者`TODO`会有利于很快理解问题. 这些不同于一般的注释因为它们是可操作的. 操作是 `FIXME: -- need to figure this out` 或 `TODO: -- need to implement`.
+  - [18.4](#comments--actionitems) 如果想表明这个问题以后会再次被查看或者给出了这个问题的解决方案，在注释前加上前缀`FIXME`或者`TODO`会有利于其他开发者很快理解问题. 这些不同于一般的注释因为它们是可操作的. 操作是 `FIXME: -- need to figure this out` 或 `TODO: -- need to implement`.
 
   <a name="comments--fixme"></a><a name="18.5"></a>
   - [18.5](#comments--fixme) 使用 `// FIXME:` 来标注问题.
@@ -2745,7 +2746,7 @@
     var arr = [1, 2];
     ```
   <a name="whitespace--computed-property-spacing"></a>
-  - [19.15](#whitespace--computed-property-spacing) Enforce spacing inside of computed properties. eslint: [`computed-property-spacing`](https://eslint.org/docs/rules/computed-property-spacing)
+  - [19.15](#whitespace--computed-property-spacing) 计算属性内不要使用空格. eslint: [`computed-property-spacing`](https://eslint.org/docs/rules/computed-property-spacing)
 
     ```javascript
     // bad
@@ -2850,7 +2851,7 @@
   <a name="commas--dangling"></a><a name="20.2"></a>
   - [20.2](#commas--dangling) 结尾使用额外的逗号 eslint: [`comma-dangle`](http://eslint.org/docs/rules/comma-dangle.html)
 
-    > 原因：会让git diff更干净.  你不必担心老式浏览器的问题 [结尾逗号问题](es5/README.md#commas)因为Babel转译器会在转译后的代码中移除额外的逗号.
+    > 原因：会让git diff更干净.  你不必担心老式浏览器的问题 [结尾逗号问题](https://github.com/airbnb/javascript/blob/es5-deprecated/es5/README.md#commas)因为Babel转译器会在转译后的代码中移除额外的逗号.
 
     ```javascript
     // bad - git diff without trailing comma
@@ -3046,7 +3047,7 @@
     ```
 
   <a name="coercion--comment-deviations"></a><a name="22.4"></a>
-  - [22.4](#coercion--comment-deviations) 不管什么原因你使用了 `parseInt`，到达了性能瓶颈，你需要使用位运算[性能原因](http://jsperf.com/coercion-vs-casting/3), 请注释说明这么做的原因.
+  - [22.4](#coercion--comment-deviations) 不管什么原因你使用了 `parseInt`，若到达了性能瓶颈，你需要使用位运算[性能原因](http://jsperf.com/coercion-vs-casting/3), 请注释说明这么做的原因.
 
     ```javascript
     // good
@@ -3089,7 +3090,7 @@
 ## 命名规则
 
   <a name="naming--descriptive"></a><a name="23.1"></a>
-  - [23.1](#naming--descriptive) 避免单字母名字. 命名需有可描述性. eslint: [`id-length`](http://eslint.org/docs/rules/id-length)
+  - [23.1](#naming--descriptive) 避免单字母名字. 命名需要有可描述性. eslint: [`id-length`](http://eslint.org/docs/rules/id-length)
 
     ```javascript
     // bad
@@ -3118,7 +3119,7 @@
     ```
 
   <a name="naming--PascalCase"></a><a name="23.3"></a>
-  - [23.3](#naming--PascalCase) 当命名构造函数或类的时候使用帕斯卡风格. eslint: [`new-cap`](http://eslint.org/docs/rules/new-cap.html)
+  - [23.3](#naming--PascalCase) 仅当命名构造函数或类的时候使用帕斯卡风格. eslint: [`new-cap`](http://eslint.org/docs/rules/new-cap.html)
 
     ```javascript
     // bad
@@ -3191,7 +3192,7 @@
     ```
 
   <a name="naming--filename-matches-export"></a><a name="23.6"></a>
-  - [23.6](#naming--filename-matches-export) 基本的文件名应该和默认导出的名字刚好匹配.
+  - [23.6](#naming--filename-matches-export) 基本的文件名应该和默认export的名字刚好匹配.
 
     ```javascript
     // file 1 contents
@@ -3227,7 +3228,7 @@
     ```
 
   <a name="naming--camelCase-default-export"></a><a name="23.7"></a>
-  - [23.7](#naming--camelCase-default-export) Use camelCase when you export-default a function当默认导出一个函数时使用驼峰风格. 文件名要和函数名相同.
+  - [23.7](#naming--camelCase-default-export) 当默认导出一个函数时使用驼峰风格. 文件名要和函数名相同.
 
     ```javascript
     function makeStyleGuide() {
@@ -3279,7 +3280,7 @@
     ];
     ```
   <a name="naming--uppercase"></a>
-  - [23.10](#naming--uppercase) 可以在以下情况把一个常量全部大写(1) 被导出, (2) `const`声明的 (不能被重新赋值), (3) 开发者相信该变量(内部嵌套的属性)不会改变.
+  - [23.10](#naming--uppercase) 可以在以下情况把一个常量全部大写(1) 被导出, (2) `const`声明的 (不能被重新赋值), (3) 开发者r认为该变量(内部嵌套的属性)不会改变.
 
     > 原因? 这对于开发者不确定变量是否会改变的情形下的额外的辅助工具. UPPERCASE_VARIABLES 能让开发者明确该变量(和它的属性)无法改变.
     - 所有用`const` 声明的变量呢? - 没必要，所以一个文件内的常量没必要用大写. 然而在导出常量的时候应该使用大写.
@@ -3367,7 +3368,7 @@
     ```
 
   <a name="accessors--consistent"></a><a name="24.4"></a>
-  - [24.4](#accessors--consistent) 也可以创建 `get()` 和 `set()` 函数, 但要保持一直.
+  - [24.4](#accessors--consistent) 也可以创建 `get()` 和 `set()` 函数, 但要保持一致.
 
     ```javascript
     class Jedi {
@@ -3617,7 +3618,7 @@
 
 **工具**
 
-  - Code Style Linters
+  - 代码风格校验
     - [ESlint](http://eslint.org/) - [Airbnb Style .eslintrc](https://github.com/airbnb/javascript/blob/master/linters/.eslintrc)
     - [JSHint](http://jshint.com/) - [Airbnb Style .jshintrc](https://github.com/airbnb/javascript/blob/master/linters/.jshintrc)
     - Neutrino preset - [@neutrinojs/airbnb](https://neutrinojs.org/packages/airbnb/)
@@ -3685,8 +3686,6 @@
 ## 谁在使用
 
   这是一份使用这份编码规范的组织列表.给我们提PR我们会把你加到这份列表里.
-
-  This is a list of organizations that are using this style guide. Send us a pull request and we'll add you to the list.
   
   - **123erfasst**: [123erfasst/javascript](https://github.com/123erfasst/javascript)
   - **3blades**: [3Blades/javascript](https://github.com/3blades/javascript)
