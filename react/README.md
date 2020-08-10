@@ -543,8 +543,7 @@
 
   > 原因：每次进行render调用`bind`时都会创建新的函数.
 
-    ```jsx
-    // bad
+  ```jsx
     class extends React.Component {
       onClickDiv() {
         // do stuff
@@ -571,12 +570,12 @@
         return <div onClick={this.onClickDiv} />
       }
     }
-    ```
+  ```
 
   - React组件的内部方法不要使用下划线前缀.
   > 原因：下划线前缀有时被其他语言用来表示私有性.但是JavaScript不一样，它并不支持私有性(priviate)，所有的都是公开的(public). 不管你怎么想, 属性添加下划线前缀并不会使其真正私有化, 任何属性 (无论是否有下划线前缀) 都应被视为公开的. 参考[#1024](https://github.com/airbnb/javascript/issues/1024)和[#490](https://github.com/airbnb/javascript/issues/490)更多的讨论.
 
-    ```jsx
+  ```jsx
     // bad
     React.createClass({
       _onClickSubmit() {
@@ -594,11 +593,11 @@
 
       // other stuff
     }
-    ```
+  ```
 
   - 确保在`render`方法中返回值. eslint: [`require-render-return`](https://github.com/yannickcr/eslint-plugin-react/pull/502)
 
-    ```jsx
+  ```jsx
     // bad
     render() {
       (<div />);
@@ -608,7 +607,7 @@
     render() {
       return (<div />);
     }
-    ```
+  ```
 
 ## 顺序
 
