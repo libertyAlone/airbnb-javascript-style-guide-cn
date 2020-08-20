@@ -280,7 +280,7 @@
   };
   ```
 
-  <a name="objects--prototype-builtins">
+  <a name="objects--prototype-builtins"></a><a name="3.7"></a>
   - [3.7](#objects--prototype-builtins) 不要直接使用`Object.prototype`,`hasOwnProperty`, `propertyIsEnumerable`和 `isPrototypeOf`方法.  eslint: [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
 
   >  原因：这些方法可能会被对象自身的同名属性覆盖 - 比如`{ hasOwnProperty: false }`或者对象是null(`Object.create(null)`).
